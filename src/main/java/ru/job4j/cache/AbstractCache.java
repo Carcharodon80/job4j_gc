@@ -14,13 +14,8 @@ public abstract class AbstractCache<K, V> {
     }
 
     public V get(K key) {
-        V result;
-        if (cache.containsKey(key) && cache.get(key).get() != null) {
-            System.out.println("Данные получены из кеша");
-            result = cache.get(key).get();
-        } else {
-            result = load(key);
-        }
+        V result = cache.getOrDefault(key, new SoftReference<>(null)).get();
+        result = result == null ? load(key) : result;
         return result;
     }
 
